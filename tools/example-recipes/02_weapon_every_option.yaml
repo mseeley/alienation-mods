@@ -1,0 +1,51 @@
+# Every key a weapon entry understands, with what it does. Copy and trim to taste.
+
+weapons:
+  - code: launcher           # heavy:     machine_gun launcher flamethrower sphere_gun
+                             # primary:   xenorifle smg energy_gun   (class-bound)
+                             # secondary: powershot shotgun revolver laser_gun
+
+    rarity: legendary        # stock | common | uncommon | rare | legendary  (or 0-4)
+    level: 30                # 1-30, as shown in game
+
+    damage: max              # max | mid | min | a number. The range depends on rarity + level;
+                             # a level-30 legendary rolls 2,696.30 - 3,466.68.
+
+    stats:                   # each: max | mid | min | a number; omitted = max
+      fire_rate: max         # 0.875 - 1.125   (laser_gun and sphere_gun have charge_time instead)
+      clip_size: max         # launcher, revolver, powershot: 0.625 - 1.375; shotgun 0.65 - 1.35;
+                             # smg 0.85 - 1.15; everything else 0.875 - 1.125
+      critical_hit_chance: max   # 0.75 - 1.25
+
+    sockets:                 # the upgrade tree: a main path with two branches
+      main:                  # up to 5. "<socket colour> <core type><core level>"
+        - red power6         # red socket holding a level-6 Power core (damage)
+        - red 6              # same thing: a bare level means "the socket's own colour"
+        - blue boost6        # Boost = fire rate
+        - yellow utility6    # Utility = clip size
+        - white prismatic6   # white sockets take anything; Prismatic = crit chance, counts as any colour
+      branch1:               # up to 3; hangs off main socket 1. The perk sits at its end.
+        - red 6
+        - red 6
+        - red 6
+      branch2:               # up to 4; hangs off main socket 2
+        - blue 6
+        - blue 6
+        - blue                # an empty blue socket (fill it in game)
+        - red boost6          # any core fits any socket; only matching colours give the bonus
+
+    # Neighbouring sockets of the same colour link up ("synergy") automatically.
+
+    perk:                    # needs 3 branch1 sockets, like every game-made weapon
+      cause: on_enemy_hit    # on_enemy_hit | on_enemy_hit_melee | on_player_hit
+      effect: cluster_shell_from_target
+                             # boomerang_at_target | chain_lightning_target |
+                             # cluster_shell_from_target | knockdown_target
+      efficiency: 1.0        # effect strength, 0.5 - 1.0: strength = base x weapon level x efficiency
+                             # (cluster shell: 250 x 30 x 1.0 = 7,500 HP per proc at level 30)
+      # value: default       # the trigger chance is fixed per weapon; leave it alone
+
+    locked: true             # protected from scrapping
+    new: true                # shows the "new" marker in the gear menu
+    tint: 7                  # 0-9: the weapon's colour tint (10 per rarity)
+    equip: true              # equip it in its own slot (here: heavy)

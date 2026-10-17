@@ -1,0 +1,10 @@
+# The shortest useful plan: add one weapon.
+#
+# Everything not given is defaulted: legendary, level 30, damage and stats at the top of what the
+# game rolls, no sockets, no perk. It's appended to the end of the weapons list, so nothing you
+# already own moves.
+#
+#   tools/.venv/bin/python tools/save-editor-cli.py apply SAVE tools/example-recipes/01_weapon_minimal.yaml --slot 0 -o OUT
+
+weapons:
+  - code: shotgun          # a secondary weapon, so any class can use it

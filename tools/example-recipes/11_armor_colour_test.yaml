@@ -1,0 +1,21 @@
+# Armor test sets. Set 1 shows each area in a contrasting colour (plates red, suit green, visor
+# blue, accent white). Sets 2 and 3 test things the game never makes: effect values it doesn't roll,
+# and more than two effects. Needs --allow-untested (or Allow untested values in the editor).
+#
+# The colour map was confirmed on console on 2026-10-12; sets 2 and 3 are still open. Results
+# template: the end of docs/save-editor.md.
+
+armor_sets:
+  - rarity: 1                     # 1. colour map (equipped)
+    colors: {plates: '#ff0000', suit: '#00ff00', visor: '#0000ff', accent: '#ffffff'}
+    effects: {movement_speed: 1.05, max_hp_multiplier: 0.85}
+    locked: true
+    equip: true
+
+  - rarity: 1                     # 2. custom values, two upsides
+    effects: {movement_speed: 1.2, max_hp_multiplier: 1.25}
+    locked: true
+
+  - rarity: 1                     # 3. four effects in one set
+    effects: {movement_speed: 1.1, rush_recharge: 1.2, health_drop_rate: 1.5, ability_drop_rate: 1.5}
+    locked: true

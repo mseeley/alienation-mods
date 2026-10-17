@@ -1,0 +1,4 @@
+capstone>=5.0
+pyyaml>=6.0
+ruamel.yaml>=0.18      # save-editor-gui.py: comment-preserving YAML
+PySide6>=6.6           # save-editor-gui.py

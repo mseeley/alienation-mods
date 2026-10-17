@@ -1,0 +1,57 @@
+# Armor sets ("ARMOR SETS" in the gear menu): four areas, each with a colour, glow and finish,
+# plus effects.
+#
+# Areas, in the gear menu's order: plates, suit (under the plates), visor, accent (small details).
+# Each area takes any of:
+#   color  "#rrggbb"
+#   glow      0 to 1: none, faint, medium, strong, full. The area gives off light in its own
+#             colour, evenly over the whole area, so a strong glow becomes a flat bright patch
+#             that hides the plates and panel lines. Game-made sets only give the visor up to
+#             0.2. The accent never glows.
+#   metallic  0 to 1: none, slight, half, mostly, full. Painted/plastic (white highlights) up
+#             to bare metal (reflections take on the colour).
+#   shine     0 to 1: flat, sheen, gloss, mirror. Dull like rubber up to sharp highlights and
+#             clear reflections. Full metallic with mirror shine looks like chrome.
+# metallic and shine are one number (even all over) or [surface, details]: two separate
+# settings, not a range. The armor's own texture decides which parts are surface and which are
+# details. Anything you leave out is kept from the set you're wearing. A bare "#rrggbb" sets just the colour.
+# Typical finishes in game-made sets:
+#   plates:  metallic 0.4 (half), shine 0.5 (sheen)
+#   suit:    metallic 0.7 (mostly), shine 0.4 surface (sheen) / 0.7 details (gloss)
+#   visor:   metallic 1 (full), shine 0 surface (flat) / 1 details (mirror)
+#   accent:  metallic 0.8 (mostly), shine 0.5 (sheen)
+#
+# Effects and the values the game rolls:
+#   movement_speed     1.05            (multiplier, 1 = neutral)
+#   max_hp_multiplier  0.85            (the game only rolls this as a downside)
+#   rush_recharge      1.1  / 0.9
+#   health_drop_rate   1.2  / 0.8
+#   ability_drop_rate  1.2  / 0.8
+#   ability_recharge_1/2/3   -1 / +1   (seconds added to that ability's recharge; negative is better)
+# Game-made sets carry exactly two effects; other values or counts need --allow-untested.
+
+armor_sets:
+  - rarity: 1                # 0 = stock (no effects), 1 = looted
+    level: 30
+    colors:
+      plates: '#c00000'      # just the colour
+      suit:
+        color: '#e6e6e6'
+        metallic: 0.7        # mostly metal, evenly
+        shine: [0.4, 0.7]    # sheen on the surface, gloss on the details
+      accent: '#202020'
+      visor:
+        color: '#ffcc00'
+        glow: 0.2            # a faint glow, like game-made visors
+        metallic: 1
+        shine: [0, 1]
+    effects:
+      movement_speed: 1.05
+      rush_recharge: 1.1
+    locked: true
+    equip: true              # wear it (also updates the armor's current colours)
+
+  - rarity: 1                # colours omitted: copies the currently equipped set
+    effects:                 # list form, if you prefer
+      - health_drop_rate: 1.2
+      - ability_recharge_1: -1

@@ -1,0 +1,55 @@
+# Things the game never generates. The code suggests they could work, but none has been tried on
+# a console. Needs --allow-untested. Try ONE at a time on a copy of your save: delete the entries
+# you aren't testing.
+#
+#   tools/.venv/bin/python tools/save-editor-cli.py apply SAVE tools/example-recipes/12_untested_experiments.yaml \
+#       --slot 0 -o OUT --allow-untested
+
+equipment:
+  # A. Double Reserve: implemented in the equipment code but never rolled (a cut perk).
+  #    Only the vortex grenade lists it, so try it there. Expect twice as many charges.
+  #    Two perk slots: the game evaluates every slot, so both should apply.
+  - code: vortex_grenade
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets: [yellow 6, yellow 6, red 6, red 6, red 6]
+    perk: [double_reserve, fast_recharge]
+
+weapons:
+  # B. A perk cause and effect the game never rolls. The text exists in the menus; whether the
+  #    effect fires is unknown.
+  - code: xenorifle          # Bio-Specialist primary; on another class this also warns
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets:
+      main:    [red 6, red 6, red 6, red 6, red 6]
+      branch1: [red 6, red 6, red 6]
+      branch2: [red 6, red 6, red 6, red 6]
+    perk: {cause: on_enemy_hit_critical, effect: poison_target, efficiency: 1.0}
+
+  # E. A perk that fires on every hit. on_enemy_hit fires with a chance of 50 x value percent
+  #    (the SMG's own value is 1/3 = 16.7%), plus a free proc whenever none fired in the last
+  #    3 seconds. value 2.0 = 100%. Watch for slowdown: a fast weapon spawns a boomerang per bullet.
+  - code: smg
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets:
+      main:    [blue boost6, red power6, red power6, red power6, red power6]
+      branch1: [blue boost6, blue boost6, blue boost6]
+      branch2: [yellow utility6, yellow utility6, yellow utility6, yellow utility6]
+    perk: {cause: on_enemy_hit, effect: boomerang_at_target, efficiency: 1.0, value: 2.0}
+
+  # C. Stats beyond what the game rolls.
+  - code: shotgun
+    rarity: legendary
+    level: 30
+    damage: 5000             # max roll is 3,466.68
+    stats: {fire_rate: 1.3, clip_size: 1.6, critical_hit_chance: 1.5}
+
+armor_sets:
+  # D. A stronger-than-rolled armor effect.
+  - rarity: 1
+    effects: {movement_speed: 1.25, max_hp_multiplier: 1.2}

@@ -1,0 +1,21 @@
+# Rebuild a weapon you already own: it keeps its place in the inventory (and stays equipped if it
+# was), its lock and its name/tint, unless you change them.
+#
+# The index comes from `tools/save-editor-cli.py show SAVE`. In the sample save, weapons[2] is the Saboteur's
+# equipped legendary SMG. The code check means the plan refuses to run if index 2 is anything else.
+#
+# Tip: `tools/save-editor-cli.py dump SAVE --slot 0 -o mine.yaml` writes every item you own in this format,
+# already filled in with its current values; delete what you don't want to touch and edit the rest.
+
+weapons:
+  - replace: {index: 2, code: smg}
+    code: smg
+    rarity: legendary
+    level: 30
+    damage: max
+    stats: {fire_rate: max, clip_size: max, critical_hit_chance: max}
+    sockets:
+      main:    [red 6, red 6, red 6, red 6, red 6]
+      branch1: [white 6, white 6, white 6]
+      branch2: [blue 6, blue 6, blue 6, blue 6]
+    perk: {cause: on_enemy_hit, effect: chain_lightning_target, efficiency: 1.0}

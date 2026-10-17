@@ -1,0 +1,28 @@
+# Character resources and levels. Every key is optional; only what you list changes.
+
+profile:
+  level: 30                  # player level 1-30
+  hero_level: 300            # 1-300, needs level 30. Lifetime XP is adjusted to match.
+                             # Trophies for skipped levels won't pop.
+
+  keys:
+    ufo: 50                  # UFO keys (key1)
+    ark: 50                  # Ark Ship keys (key2)
+
+  cores:                     # loose cores in the inventory: <type><level 1-6>
+    boost6: 100              # blue
+    power6: 100              # red
+    utility6: 100            # yellow
+    prismatic6: 100          # white
+    power5: 20
+
+  metals:                    # salvage materials used to reroll weapon stats
+    stock: 999
+    common: 999
+    uncommon: 999
+    rare: 999
+    legendary: 999
+
+  credits: 500000
+
+  flowers: 100               # Xenoflowers collected (XENOFLOWERS on the Resources screen)

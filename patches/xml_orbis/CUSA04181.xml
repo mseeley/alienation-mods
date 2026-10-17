@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ALIENATION (CUSA04181) patches. Addresses are 0x400000 + eboot vaddr (patch0, APP_VER 01.07).
+  See docs/developer-hooks.md for how each patch was derived.
+-->
+<Patch>
+    <TitleID>
+        <ID>CUSA04181</ID>
+    </TitleID>
+    <Metadata Title="ALIENATION"
+              Name="Enable debug mode"
+              Note="Makes is_debug_enabled() return true, as if the ANDEBUGXXXXXXXXX debug add-on were owned. Controls need a USB keyboard. F1 shows the engine debug overlay; F2/F3 change page (GUI, Tweakables, Performance, GFX memory and more). In levels: Q god mode, W demigod, K kill all enemies, O teleport, Y wallhack, Numpad 0 debug camera. Full key map in docs/developer-hooks.md. Confirmed working on console."
+              Author="Claude"
+              PatchVer="1.1"
+              AppVer="01.07"
+              AppElf="eboot.bin">
+        <PatchList>
+            <!-- DRM::is_debug_enabled: mov al,[rdi+0x1a]; ret  ->  mov al,1; ret; nop -->
+            <Line Type="bytes" Address="0x005156e0" Value="b001c390"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="ALIENATION"
+              Name="60 FPS"
+              Note="Gameplay runs at 29.97 fps (menus already run at 59.94). Forces every engine_set_fps() call to 59.94, which halves the fixed game-logic step and switches the video flip rate to 60 Hz, so game speed is unchanged. Also changes every per-frame time step hard-coded as 1/30 to 1/60, so the effects keep their speed: the render time step, hologram shader animation, a render animation phase, the weather/rain per-frame count and the online sync timer. If the console can't hold 60 fps the game slows down rather than dropping frames (max frame skip is 0, as it was at 30). Pair with Resolution 720p for headroom."
+              Author="Claude"
+              PatchVer="1.1"
+              AppVer="01.07"
+              AppElf="eboot.bin">
+        <PatchList>
+            <!-- engine_set_fps script function (0x378080): skip the int/float type branch... -->
+            <Line Type="bytes" Address="0x007780a1" Value="9090"/>
+            <!-- ...and load 59.94 (constant at 0x176cfc0) instead of the argument: vmovss xmm0,[rip+0x13f4f15]; jmp 0x3780bc -->
+            <Line Type="bytes" Address="0x007780a3" Value="c5fa1005154f3f01eb0f"/>
+            <!-- Per-frame 1/30 constants -> 1/60. Each is read by exactly one instruction. -->
+            <!-- Game_Runner fixed render time step (read at 0x15474b) -->
+            <Line Type="bytes" Address="0x01b73f58" Value="8988883c"/>
+            <!-- Hologram shader phases += speed * (1/30) per frame (vec4, read at 0x119111) -->
+            <Line Type="bytes" Address="0x01b6d5c0" Value="8988883c8988883c8988883c8988883c"/>
+            <!-- Render animation phase += (1/30) / period per frame (read at 0xeb9e) -->
+            <Line Type="bytes" Address="0x01b306d8" Value="8988883c"/>
+            <!-- Weather/rain render node: per-frame count = rate * (1/30) (read at 0x1700a) -->
+            <Line Type="bytes" Address="0x01b31558" Value="8988883c"/>
+            <!-- Stated network sync timer += 1/30 per frame (read at 0x3fc59a) -->
+            <Line Type="bytes" Address="0x01bb2248" Value="8988883c"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="ALIENATION"
+              Name="Resolution 720p (1280x720)"
+              Note="Lowers the render and output resolution from the fixed 1920x1080 to 1280x720 (about 44% of the pixels), for a steadier frame rate with the 60 FPS patch. The console scales the 720p image to your TV. Every render target is sized from this one value, so GPU memory use drops and the 1 GB render-target pool is left unchanged. Expect a softer image and text. Untested on console."
+              Author="Claude"
+              PatchVer="1.0"
+              AppVer="01.07"
+              AppElf="eboot.bin">
+        <PatchList>
+            <!-- Display config default (0x2ffe10): movabs rax, (1080 << 32) | 1920  ->  (720 << 32) | 1280.
+                 Sets the front buffer and RENDER_RESOLUTION_X/Y, which sizes every render target in the Lua pipeline. -->
+            <Line Type="bytes" Address="0x006ffe22" Value="00050000d0020000"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="ALIENATION"
+              Name="Skip intro videos"
+              Note="Skips the boot logo video (video/splash.mp4, or splash_SIE.mp4 in Korea) and the narrated intro (video/intro.mp4). Those two files are made to fail to open, which takes the boot script's own no-video path: the game continues straight to loading and the title screen with no timeout. The title-screen background video and other videos are unaffected. Untested on console."
+              Author="Claude"
+              PatchVer="1.0"
+              AppVer="01.07"
+              AppElf="eboot.bin">
+        <PatchList>
+            <!-- AV_Player_Orbis ctor (0x113780), just before sceAvPlayerAddSource: mov rdi,[rbx+0x30]; mov rsi,r15  ->  jmp 0x6cdb0; nop; nop -->
+            <Line Type="bytes" Address="0x00513a60" Value="e94b93f5ff9090"/>
+            <!-- Code at 0x6cdb0 (unreferenced 48-byte helper): path is "/app0/video/<name>"; if [r15+12] is "spla" or "intr",
+                 jmp 0x113b34 (closes the player and leaves it uninitialised), otherwise run the displaced instructions and jmp 0x113a67 -->
+            <Line Type="bytes" Address="0x0046cdb0" Value="41817f0c73706c61741641817f0c696e7472740c488b7b304c89fee9976c0a00e95f6d0a00"/>
+        </PatchList>
+    </Metadata>
+    <Metadata Title="ALIENATION"
+              Name="Fast weapon scrapping"
+              Note="Shortens the hold-L3 scrap time while keeping it longer for rarer weapons: 0.3 / 0.4 / 0.5 / 0.75 / 1.0 s from lowest to highest rarity (the game's own times are 0.5 / 0.5 / 0.5 / 1.0 / 2.0). Holding L3 doesn't speed it up, and releasing resets the bar. The times are a script constant in stream.dat (props.sell_times); the patch rewrites them in memory when the game loads its scripts. Untested on console."
+              Author="Claude"
+              PatchVer="1.1"
+              AppVer="01.07"
+              AppElf="eboot.bin">
+        <PatchList>
+            <!-- Stated bytecode loader (0x3dad40), r12 = STAD payload: movsxd rsi,[r12+0x14]  ->  jmp 0x2b050 -->
+            <Line Type="bytes" Address="0x007dae06" Value="e94502c5ff"/>
+            <!-- Code at 0x2b050 (unreferenced 48-byte function): rcx = STAD+0x6824c5 (the five sell_times PushFloat32 operands, 5 bytes apart).
+                 If the last one is still 2.0 (top byte 0x40): 0.5->0.3, 0.5->0.4, (0.5 kept), 1.0->0.75, 2.0->1.0.
+                 Then run the displaced movsxd and jmp 0x3dae0b -->
+            <Line Type="bytes" Address="0x0042b050" Value="498d8c24c5246800807917407517c7019a99993ec74105cdcccc3ec641114066c74116803f4963742414e98cfd3a00"/>
+        </PatchList>
+    </Metadata>
+</Patch>

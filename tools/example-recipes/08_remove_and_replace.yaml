@@ -1,0 +1,29 @@
+# Swap the equipped heavy weapon for a new one, then delete the old one and some clutter.
+#
+# Order of operations: replacements and additions first, then `equip`, then removals.
+# So you can equip a new weapon and remove the one it replaces in the same plan.
+# Removal indices refer to the inventory *before* the plan runs (what `show` printed);
+# later items shift down and the equipped pointers are fixed for you.
+#
+# Indices are from the sample save:
+#   weapons[3] = powershot (rare, not equipped)
+#   weapons[5] = launcher  (legendary, equipped heavy)
+
+weapons:
+  - code: flamethrower       # new heavy weapon...
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets:
+      main:    [red 6, red 6, red 6, red 6, red 6]
+      branch1: [red 6, red 6, red 6]
+      branch2: [yellow 6, yellow 6, yellow 6, yellow 6]
+    perk: {cause: on_enemy_hit, effect: knockdown_target, efficiency: 1.0}
+    equip: true              # ...takes over the heavy slot from the launcher
+
+remove:
+  weapons:
+    - {index: 5, code: launcher}     # the old heavy; refused if it's still equipped
+    - {index: 3, code: powershot}
+  # equipment: [1]
+  # armor_sets: [0]

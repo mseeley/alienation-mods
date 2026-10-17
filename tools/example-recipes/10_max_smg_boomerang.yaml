@@ -1,0 +1,43 @@
+# The maxed SMG with the boomerang perk: "on enemy hit, throw a boomerang at the target".
+#
+# This rebuilds the weapon that was tested on console on 2026-10-10, the first save edit
+# confirmed to work in game.
+#
+#   - legendary, level 30, damage and stats at the top of what the game rolls
+#   - all 13 slots: 12 sockets + the perk. Four sockets of each colour, laid out so each colour
+#     forms one linked run (9 synergy links):
+#       main    blue  red  red  red  red        (blue starts branch 1, red starts branch 2)
+#       branch1 blue  blue blue  -> perk        hangs off main socket 1 (blue)
+#       branch2 yellow x4                       hangs off main socket 2
+#   - every socket holds a level-6 core of its own colour
+#   - perk: on_enemy_hit -> boomerang_at_target at full efficiency (the SMG's fixed trigger
+#     chance is 1/3 per hit)
+#
+# The SMG is the Saboteur's primary. On a Bio-Specialist or Tank it needs the weapon hack add-on.
+#
+#   tools/.venv/bin/python tools/save-editor-cli.py apply SAVE tools/example-recipes/10_max_smg_boomerang.yaml \
+#       --slot 0 -o edits/max_smg_boomerang/CUSA04181_sdimg_savedata
+
+weapons:
+  - code: smg
+    rarity: legendary
+    level: 30
+    damage: max
+    stats:
+      fire_rate: max
+      clip_size: max
+      critical_hit_chance: max
+    sockets:
+      main:    [blue boost6, red power6, red power6, red power6, red power6]
+      branch1: [blue boost6, blue boost6, blue boost6]
+      branch2: [yellow utility6, yellow utility6, yellow utility6, yellow utility6]
+    perk:
+      cause: on_enemy_hit
+      effect: boomerang_at_target
+      efficiency: 1.0
+    locked: true
+    equip: true              # make it the equipped primary
+
+# Bonus: spare level-6 cores to slot into other gear in game.
+profile:
+  cores: {boost6: 100, power6: 100, utility6: 100, prismatic6: 100}

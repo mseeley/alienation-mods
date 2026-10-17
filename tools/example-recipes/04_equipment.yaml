@@ -1,0 +1,47 @@
+# All five equipment types, maxed. Equipment has a single row of sockets (no branches) and, at
+# legendary, one attribute perk after the 5th socket.
+#
+# Core colours on equipment: blue/Boost = effect radius, red/Power = damage,
+# yellow/Utility = recharge rate (vortex: effect lifetime).
+#
+# Equipment perks:
+#   fast_recharge   doubles how fast it refills            - every type
+#   speed_jolt      movement-speed boost when thrown        - every type except vortex_grenade
+#   double_reserve  doubles how many you carry (never rolled; see 12_untested_experiments.yaml)
+
+equipment:
+  - code: grenade
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets: [red 6, red 6, red 6, red 6, red 6]
+    perk: fast_recharge
+
+  - code: cluster_grenade
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets: [red 6, red 6, red 6, blue 6, blue 6]
+    perk: speed_jolt
+
+  - code: mine
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets: [red 6, red 6, red 6, yellow 6, yellow 6]
+    perk: fast_recharge
+
+  - code: boomerang
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets: [red 6, red 6, red 6, red 6, red 6]
+    perk: speed_jolt
+    equip: true              # equipment has one slot; this replaces the equipped grenade
+
+  - code: vortex_grenade     # needs the Vortex Grenade add-on (or All Weapons)
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets: [yellow 6, yellow 6, red 6, red 6, red 6]
+    perk: fast_recharge      # speed_jolt is rolled for vortex but probably does nothing

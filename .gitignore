@@ -1,0 +1,20 @@
+# Game dump and original save exports (read-only reference copies, not for the repo)
+/dumps/
+/savegames/
+
+# Save editor output (edited copies of savegames) and personal recipes
+/edits/
+/recipes/
+
+# Python
+tools/.venv/
+tools/.cache/
+__pycache__/
+
+# Built app (tools/make-save-editor-app.py)
+tools/Alienation Savegame Editor.app/
+
+.DS_Store
+
+# Claude Code app state
+.claude/.cc-writes/

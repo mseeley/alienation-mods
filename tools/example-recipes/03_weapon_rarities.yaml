@@ -1,0 +1,42 @@
+# One revolver per rarity, each with the largest upgrade tree the game generates for it.
+# Handy as a reference for what each rarity can hold.
+#
+#   rarity      main  branch1  branch2  perk
+#   stock         0      -        -      no
+#   common        0      -        -      no
+#   uncommon      2     0-2       -      no
+#   rare          3     0-3       -      yes, once branch1 has 3
+#   legendary     5     0-3      0-4     yes, once branch1 has 3
+
+weapons:
+  - code: revolver
+    rarity: stock
+    level: 30
+
+  - code: revolver
+    rarity: common
+    level: 30
+
+  - code: revolver
+    rarity: uncommon
+    level: 30
+    sockets:
+      main:    [red 6, red 6]
+      branch1: [yellow 6, yellow 6]
+
+  - code: revolver
+    rarity: rare
+    level: 30
+    sockets:
+      main:    [red 6, red 6, red 6]
+      branch1: [yellow 6, yellow 6, yellow 6]
+    perk: {cause: on_enemy_hit_melee, effect: knockdown_target, efficiency: 1.0}
+
+  - code: revolver
+    rarity: legendary
+    level: 30
+    sockets:
+      main:    [red 6, red 6, red 6, red 6, red 6]
+      branch1: [yellow 6, yellow 6, yellow 6]
+      branch2: [white 6, white 6, white 6, white 6]
+    perk: {cause: on_player_hit, effect: chain_lightning_target, efficiency: 1.0}

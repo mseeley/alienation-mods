@@ -1,0 +1,51 @@
+# A complete Saboteur loadout: one maxed weapon per slot plus a grenade, all equipped.
+# For a Bio-Specialist use xenorifle as the primary, for a Tank energy_gun.
+#
+# Colour plan: each weapon stacks one colour along its tree so every socket links (synergy).
+
+weapons:
+  - code: machine_gun        # heavy
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets:
+      main:    [red 6, red 6, red 6, red 6, red 6]
+      branch1: [blue 6, blue 6, blue 6]
+      branch2: [yellow 6, yellow 6, yellow 6, yellow 6]
+    perk: {cause: on_enemy_hit, effect: chain_lightning_target, efficiency: 1.0}
+    locked: true
+    equip: true
+
+  - code: smg                # primary (Saboteur)
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets:
+      main:    [red 6, red 6, red 6, red 6, red 6]
+      branch1: [blue 6, blue 6, blue 6]
+      branch2: [white 6, white 6, white 6, white 6]
+    perk: {cause: on_enemy_hit, effect: cluster_shell_from_target, efficiency: 1.0}
+    locked: true
+    equip: true
+
+  - code: shotgun            # secondary
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets:
+      main:    [red 6, red 6, red 6, red 6, red 6]
+      branch1: [red 6, red 6, red 6]
+      branch2: [yellow 6, yellow 6, yellow 6, yellow 6]
+    perk: {cause: on_enemy_hit_melee, effect: knockdown_target, efficiency: 1.0}
+    locked: true
+    equip: true
+
+equipment:
+  - code: cluster_grenade
+    rarity: legendary
+    level: 30
+    damage: max
+    sockets: [red 6, red 6, red 6, red 6, red 6]
+    perk: fast_recharge
+    locked: true
+    equip: true
